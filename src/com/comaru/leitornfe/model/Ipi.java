@@ -31,4 +31,12 @@ public class Ipi {
 		this.cEnq = cEnq;
 	}
 
+	public IpiTrib getIpiTrib() {
+		return ipiTrib;
+	}
+
+	public void setIpiTrib(IpiTrib ipiTrib) {
+		this.ipiTrib = ipiTrib;
+	}
+
 }

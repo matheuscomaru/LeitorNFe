@@ -17,7 +17,7 @@ public class teste {
 
 		for (Produto p : nfeModel.getProdutos()) {
 
-			System.out.println(p.getImposto().getIcms().getpICMS());
+			System.out.println(p.getImposto().getIpi().getIpiTrib().getvBC());
 		}
 	}
 

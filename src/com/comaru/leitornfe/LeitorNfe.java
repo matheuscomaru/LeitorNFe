@@ -15,6 +15,8 @@ import org.xml.sax.SAXException;
 
 import com.comaru.leitornfe.model.Icms;
 import com.comaru.leitornfe.model.ImpostoProduto;
+import com.comaru.leitornfe.model.Ipi;
+import com.comaru.leitornfe.model.IpiTrib;
 
 public class LeitorNfe {
 
@@ -184,6 +186,7 @@ public class LeitorNfe {
 				// ====================
 				Node nodeImposto = listaProd.item(1);
 				NodeList nodeListImposto = nodeImposto.getChildNodes();
+				Element elementListImposto = (Element) nodeListImposto;
 
 				// ====================
 				// --> ICMS
@@ -233,6 +236,14 @@ public class LeitorNfe {
 
 				}
 
+				// ====================
+				// --> IPI
+				// ====================
+
+				NodeList nodeListIpi = elementListImposto.getElementsByTagName("IPI");
+
+				imposto.setIpi(getIpi(nodeListIpi));
+
 				imposto.setIcms(icms);
 				produto.setImposto(imposto);
 				lista.add(produto);
@@ -251,6 +262,75 @@ public class LeitorNfe {
 		}
 
 		return lista;
+
+	}
+
+	public static Ipi getIpi(NodeList nodeListIpi) {
+
+		Ipi ipi = new Ipi();
+
+		for (int i = 0; i < nodeListIpi.getLength(); i++) {
+
+			Node nodeItemIpi = nodeListIpi.item(i);
+			NodeList nodeItemListIpi = nodeItemIpi.getChildNodes();
+
+			for (int j = 0; j < nodeItemListIpi.getLength(); j++) {
+
+				Element el = (Element) nodeItemListIpi.item(j);
+
+				switch (el.getTagName()) {
+				case "CNPJProd":
+					ipi.setCNPJProd(el.getTextContent());
+					break;
+				case "qSelo":
+					ipi.setqSelo(el.getTextContent());
+					break;
+				case "cEnq":
+					ipi.setcEnq(el.getTextContent());
+					break;
+				case "IPITrib":
+					Node nodeIPITrib = el;
+					NodeList nodeListIPITrib = nodeIPITrib.getChildNodes();
+					ipi.setIpiTrib(getIpiTrib(nodeListIPITrib));
+					break;
+
+				}
+
+			}
+
+		}
+
+		return ipi;
+	}
+
+	public static IpiTrib getIpiTrib(NodeList nodeList) {
+
+		IpiTrib ipiTrib = new IpiTrib();
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+
+			Node node = nodeList.item(i);
+			Element el = (Element) node;
+
+			switch (el.getTagName()) {
+			case "CST":
+				ipiTrib.setCst(el.getTextContent());
+				break;
+			case "vBC":
+				ipiTrib.setvBC(Double.parseDouble(el.getTextContent()));
+				break;
+			case "pIPI":
+				ipiTrib.setpIPI(Double.parseDouble(el.getTextContent()));
+				break;
+			case "vIPI":
+				ipiTrib.setvIPI(Double.parseDouble(el.getTextContent()));
+				break;
+
+			}
+
+		}
+
+		return ipiTrib;
 
 	}
 
