@@ -17,6 +17,8 @@ import com.comaru.leitornfe.model.Icms;
 import com.comaru.leitornfe.model.ImpostoProduto;
 import com.comaru.leitornfe.model.Ipi;
 import com.comaru.leitornfe.model.IpiTrib;
+import com.comaru.leitornfe.model.Pis;
+import com.comaru.leitornfe.model.PisAliq;
 
 public class LeitorNfe {
 
@@ -236,13 +238,13 @@ public class LeitorNfe {
 
 				}
 
-				// ====================
-				// --> IPI
-				// ====================
-
+				// IPI
 				NodeList nodeListIpi = elementListImposto.getElementsByTagName("IPI");
-
 				imposto.setIpi(getIpi(nodeListIpi));
+
+				// PIS
+				NodeList nodeListPis = elementListImposto.getElementsByTagName("PIS");
+				imposto.setPis(getPis(nodeListPis));
 
 				imposto.setIcms(icms);
 				produto.setImposto(imposto);
@@ -334,71 +336,42 @@ public class LeitorNfe {
 
 	}
 
-	public static Icms getIcms(int posit) {
-		Icms icms = new Icms();
+	public static Pis getPis(NodeList nodeList) {
 
-		try {
+		Pis pis = new Pis();
+		PisAliq pisAliq = new PisAliq();
 
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
+		for (int i = 0; i < nodeList.getLength(); i++) {
 
-			Document doc = builder.parse(caminho);
-			NodeList listaDet = doc.getElementsByTagName("ICMS00");
-			Node itemDet = listaDet.item(0);
+			Node node = nodeList.item(i).getFirstChild();
+			NodeList n2 = node.getChildNodes();
 
-			if (itemDet.getNodeType() == Node.ELEMENT_NODE) {
+			for (int j = 0; j < n2.getLength(); j++) {
 
-				NodeList filhos = itemDet.getChildNodes();
+				Element el = (Element) n2.item(j);
 
-				for (int j = 0; j < filhos.getLength(); j++) {
+				switch (el.getTagName()) {
+				case "CST":
+					pisAliq.setCST(el.getTextContent());
+					break;
+				case "vBC":
+					pisAliq.setvBC(Double.parseDouble(el.getTextContent()));
+					break;
+				case "pPIS":
+					pisAliq.setpPIS(Double.parseDouble(el.getTextContent()));
+					break;
+				case "vPIS":
+					pisAliq.setvPIS(Double.parseDouble(el.getTextContent()));
+					break;
 
-					if (j == posit) {
-
-						Node filho = filhos.item(j);
-						Element el = (Element) filho;
-
-						switch (el.getTagName()) {
-						case "orig":
-							icms.setOrig(el.getTextContent());
-							System.out.println(el.getTextContent());
-							break;
-						case "CST":
-							icms.setCst(el.getTextContent());
-							System.out.println(el.getTextContent());
-							break;
-						case "modBC":
-							icms.setModBC(el.getTextContent());
-							System.out.println(el.getTextContent());
-							break;
-						case "vBC":
-							icms.setvBC(Double.parseDouble(el.getTextContent()));
-							break;
-						case "pICMS":
-							icms.setpICMS(Double.parseDouble(el.getTextContent()));
-							break;
-						case "vICMS":
-							icms.setvICMS(Double.parseDouble(el.getTextContent()));
-							break;
-						}
-
-						return icms;
-					}
 				}
 
 			}
 
-		} catch (
-
-		ParserConfigurationException ex) {
-			ex.printStackTrace();
-		} catch (SAXException ex) {
-			ex.printStackTrace();
-		} catch (IOException ex) {
-			ex.printStackTrace();
 		}
 
-		return icms;
-
+		pis.setPisAliq(pisAliq);
+		return pis;
 	}
 
 }

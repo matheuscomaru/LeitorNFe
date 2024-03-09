@@ -2,8 +2,9 @@ package com.comaru.leitornfe.model;
 
 public class ImpostoProduto {
 
-	Icms icms = new Icms();
-	Ipi ipi = new Ipi();
+	private Icms icms = new Icms();
+	private Ipi ipi = new Ipi();
+	private Pis pis = new Pis();
 
 	public Icms getIcms() {
 		return icms;
@@ -19,6 +20,14 @@ public class ImpostoProduto {
 
 	public void setIpi(Ipi ipi) {
 		this.ipi = ipi;
+	}
+
+	public Pis getPis() {
+		return pis;
+	}
+
+	public void setPis(Pis pis) {
+		this.pis = pis;
 	}
 
 }
