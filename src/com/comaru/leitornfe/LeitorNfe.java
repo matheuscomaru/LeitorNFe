@@ -13,22 +13,26 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.comaru.leitornfe.model.Icms;
+import com.comaru.leitornfe.model.ImpostoProduto;
+
 public class LeitorNfe {
 
-	private LeitorNfe() {
+	static String caminho = "";
 
-	}
-
-	public static NFeModel getNfeModel(String caminho) {
-
+	public static NFeModel getNfeModel(String caminhoArquivo) {
+		caminho = caminhoArquivo;
 		NFeModel nfeModel = new NFeModel();
-		nfeModel.setEmitNfe(getEmitNfe(caminho));
-		nfeModel.setProdutos(getItens(caminho));
+		nfeModel.setEmitNfe(getEmitNfe());
+		nfeModel.setProdutos(getItens());
 		return nfeModel;
 
 	}
 
-	public static EmitModel getEmitNfe(String arquivo) {
+	// ====================
+	// EMITENTE
+	// ====================
+	public static EmitModel getEmitNfe() {
 
 		EmitModel emit = new EmitModel();
 
@@ -37,9 +41,8 @@ public class LeitorNfe {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
-			Document doc = builder.parse(arquivo);
+			Document doc = builder.parse(caminho);
 
-			// EMITENTE
 			NodeList lista = doc.getElementsByTagName("emit");
 
 			Node node = lista.item(0);
@@ -92,7 +95,10 @@ public class LeitorNfe {
 
 	}
 
-	public static ArrayList<Produto> getItens(String arquivo) {
+	// ====================
+	// PRODUTOS
+	// ====================
+	public static ArrayList<Produto> getItens() {
 
 		ArrayList<Produto> lista = new ArrayList<>();
 
@@ -101,14 +107,15 @@ public class LeitorNfe {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
 
-			Document doc = builder.parse(arquivo);
+			Document doc = builder.parse(caminho);
 
-			// EMITENTE
 			NodeList listaDet = doc.getElementsByTagName("det");
 
 			for (int i = 0; i < listaDet.getLength(); i++) {
 
 				Produto produto = new Produto();
+				ImpostoProduto imposto = new ImpostoProduto();
+				Icms icms = new Icms();
 
 				Node itemDet = listaDet.item(i);
 
@@ -171,6 +178,63 @@ public class LeitorNfe {
 					}
 
 				}
+
+				// ====================
+				// IMPOSTO
+				// ====================
+				Node nodeImposto = listaProd.item(1);
+				NodeList nodeListImposto = nodeImposto.getChildNodes();
+
+				// ====================
+				// --> ICMS
+				// ====================
+
+				Node nodeIcms00 = nodeListImposto.item(1);
+				NodeList nodeListIcms = nodeIcms00.getChildNodes();
+
+				for (int j = 0; j < nodeListIcms.getLength(); j++) {
+
+					Node nodeIcms = nodeListIcms.item(0);
+
+					if (nodeIcms.getNodeType() == Node.ELEMENT_NODE) {
+
+						NodeList filhos = nodeIcms.getChildNodes();
+
+						for (int contIcms = 0; contIcms < filhos.getLength(); contIcms++) {
+
+							Node filho = filhos.item(contIcms);
+							Element el = (Element) filho;
+
+							switch (el.getTagName()) {
+							case "orig":
+								icms.setOrig(el.getTextContent());
+								break;
+							case "CST":
+								icms.setCst(el.getTextContent());
+								break;
+							case "modBC":
+								icms.setModBC(el.getTextContent());
+								break;
+							case "vBC":
+								icms.setvBC(Double.parseDouble(el.getTextContent()));
+								break;
+							case "pICMS":
+								icms.setpICMS(Double.parseDouble(el.getTextContent()));
+								break;
+							case "vICMS":
+								icms.setvICMS(Double.parseDouble(el.getTextContent()));
+								break;
+
+							}
+
+						}
+
+					}
+
+				}
+
+				imposto.setIcms(icms);
+				produto.setImposto(imposto);
 				lista.add(produto);
 			}
 
@@ -186,7 +250,74 @@ public class LeitorNfe {
 			ex.printStackTrace();
 		}
 
-		return null;
+		return lista;
+
+	}
+
+	public static Icms getIcms(int posit) {
+		Icms icms = new Icms();
+
+		try {
+
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+
+			Document doc = builder.parse(caminho);
+			NodeList listaDet = doc.getElementsByTagName("ICMS00");
+			Node itemDet = listaDet.item(0);
+
+			if (itemDet.getNodeType() == Node.ELEMENT_NODE) {
+
+				NodeList filhos = itemDet.getChildNodes();
+
+				for (int j = 0; j < filhos.getLength(); j++) {
+
+					if (j == posit) {
+
+						Node filho = filhos.item(j);
+						Element el = (Element) filho;
+
+						switch (el.getTagName()) {
+						case "orig":
+							icms.setOrig(el.getTextContent());
+							System.out.println(el.getTextContent());
+							break;
+						case "CST":
+							icms.setCst(el.getTextContent());
+							System.out.println(el.getTextContent());
+							break;
+						case "modBC":
+							icms.setModBC(el.getTextContent());
+							System.out.println(el.getTextContent());
+							break;
+						case "vBC":
+							icms.setvBC(Double.parseDouble(el.getTextContent()));
+							break;
+						case "pICMS":
+							icms.setpICMS(Double.parseDouble(el.getTextContent()));
+							break;
+						case "vICMS":
+							icms.setvICMS(Double.parseDouble(el.getTextContent()));
+							break;
+						}
+
+						return icms;
+					}
+				}
+
+			}
+
+		} catch (
+
+		ParserConfigurationException ex) {
+			ex.printStackTrace();
+		} catch (SAXException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		return icms;
 
 	}
 

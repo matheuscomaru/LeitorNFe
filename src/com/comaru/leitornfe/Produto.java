@@ -1,5 +1,7 @@
 package com.comaru.leitornfe;
 
+import com.comaru.leitornfe.model.ImpostoProduto;
+
 public class Produto {
 
 	String cProd;
@@ -16,6 +18,7 @@ public class Produto {
 	double qTrib;
 	double vUnTrib;
 	int indTot;
+	ImpostoProduto imposto = new ImpostoProduto();
 
 	public String getcProd() {
 		return cProd;
@@ -127,6 +130,14 @@ public class Produto {
 
 	public void setIndTot(int indTot) {
 		this.indTot = indTot;
+	}
+
+	public ImpostoProduto getImposto() {
+		return imposto;
+	}
+
+	public void setImposto(ImpostoProduto imposto) {
+		this.imposto = imposto;
 	}
 
 }
