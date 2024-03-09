@@ -17,7 +17,7 @@ public class teste {
 
 		for (Produto p : nfeModel.getProdutos()) {
 
-			System.out.println(p.getImposto().getPis().getPisAliq().getvPIS());
+			System.out.println(p.getImposto().getCofins().getCofinsAliq().getvCOFINS());
 		}
 	}
 

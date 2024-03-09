@@ -13,6 +13,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.comaru.leitornfe.model.Cofins;
+import com.comaru.leitornfe.model.CofinsAliq;
 import com.comaru.leitornfe.model.Icms;
 import com.comaru.leitornfe.model.ImpostoProduto;
 import com.comaru.leitornfe.model.Ipi;
@@ -20,10 +22,26 @@ import com.comaru.leitornfe.model.IpiTrib;
 import com.comaru.leitornfe.model.Pis;
 import com.comaru.leitornfe.model.PisAliq;
 
+/**
+ * LeitorNfe
+ *
+ * <p>
+ * Possui métodos para ler o arquivo XML de NFe e converter em modelos para
+ * fácilitar a manipulação.
+ *
+ * @author Matheus Comaru
+ * @version 1.0
+ */
 public class LeitorNfe {
 
 	static String caminho = "";
 
+	/**
+	 * Converte o XML da NF-e em um Objeto já manipulável.
+	 *
+	 * @param caminhoArquivo Caminho completo do XML exemplo C://arquivo.xml.
+	 * @return NFeModel.
+	 */
 	public static NFeModel getNfeModel(String caminhoArquivo) {
 		caminho = caminhoArquivo;
 		NFeModel nfeModel = new NFeModel();
@@ -246,6 +264,10 @@ public class LeitorNfe {
 				NodeList nodeListPis = elementListImposto.getElementsByTagName("PIS");
 				imposto.setPis(getPis(nodeListPis));
 
+				// Cofins
+				NodeList nodeListCofins = elementListImposto.getElementsByTagName("COFINS");
+				imposto.setCofins(getCofins(nodeListCofins));
+
 				imposto.setIcms(icms);
 				produto.setImposto(imposto);
 				lista.add(produto);
@@ -372,6 +394,44 @@ public class LeitorNfe {
 
 		pis.setPisAliq(pisAliq);
 		return pis;
+	}
+
+	public static Cofins getCofins(NodeList nodeList) {
+
+		Cofins cofins = new Cofins();
+		CofinsAliq cofinsAliq = new CofinsAliq();
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+
+			Node node = nodeList.item(i).getFirstChild();
+			NodeList n2 = node.getChildNodes();
+
+			for (int j = 0; j < n2.getLength(); j++) {
+
+				Element el = (Element) n2.item(j);
+
+				switch (el.getTagName()) {
+				case "CST":
+					cofinsAliq.setCST(el.getTextContent());
+					break;
+				case "vBC":
+					cofinsAliq.setvBC(Double.parseDouble(el.getTextContent()));
+					break;
+				case "pCOFINS":
+					cofinsAliq.setpCOFINS(Double.parseDouble(el.getTextContent()));
+					break;
+				case "vCOFINS":
+					cofinsAliq.setvCOFINS(Double.parseDouble(el.getTextContent()));
+					break;
+
+				}
+
+			}
+
+		}
+
+		cofins.setCofinsAliq(cofinsAliq);
+		return cofins;
 	}
 
 }
