@@ -19,7 +19,7 @@ public class teste {
 		// LeitorNfe.getItens("C:\\teste.xml");
 
 		System.out.println(nfeModel.getEmitNfe().getEnderEmit().getnro());
-		System.out.println(nfeModel.getEmitNfe().getEnderEmit().getxCpl());
+		System.out.println(nfeModel.getTotais().getvICMS());
 
 		for (Produto p : nfeModel.getProdutos()) {
 

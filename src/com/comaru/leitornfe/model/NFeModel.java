@@ -31,6 +31,7 @@ public class NFeModel {
 	EmitModel emitNfe = new EmitModel();
 	Destinatario destNfe = new Destinatario();
 	ArrayList<Produto> produtos = new ArrayList<>();
+	Totais totais = new Totais();
 
 	public EmitModel getEmitNfe() {
 		return emitNfe;
@@ -238,6 +239,14 @@ public class NFeModel {
 
 	public void setDestNfe(Destinatario destNfe) {
 		this.destNfe = destNfe;
+	}
+
+	public Totais getTotais() {
+		return totais;
+	}
+
+	public void setTotais(Totais totais) {
+		this.totais = totais;
 	}
 
 }

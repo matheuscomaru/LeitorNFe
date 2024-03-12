@@ -28,6 +28,7 @@ import com.comaru.leitornfe.model.NFeModel;
 import com.comaru.leitornfe.model.Pis;
 import com.comaru.leitornfe.model.PisAliq;
 import com.comaru.leitornfe.model.Produto;
+import com.comaru.leitornfe.model.Totais;
 
 /**
  * LeitorNfe
@@ -56,11 +57,12 @@ public class LeitorNfe {
 		nfeModel.setEmitNfe(getEmitNfe());
 		nfeModel.setDestNfe(getDestNfe());
 		nfeModel.setProdutos(getItens());
+		nfeModel.setTotais(getTotais());
 		return nfeModel;
 
 	}
 
-	public static NFeModel getIde(NFeModel nfeModel) {
+	private static NFeModel getIde(NFeModel nfeModel) {
 
 		try {
 
@@ -170,7 +172,7 @@ public class LeitorNfe {
 	// ====================
 	// EMITENTE
 	// ====================
-	public static EmitModel getEmitNfe() {
+	private static EmitModel getEmitNfe() {
 
 		EmitModel emit = new EmitModel();
 
@@ -248,7 +250,7 @@ public class LeitorNfe {
 	// ====================
 	// DEST
 	// ====================
-	public static Destinatario getDestNfe() {
+	private static Destinatario getDestNfe() {
 
 		Destinatario dest = new Destinatario();
 
@@ -319,7 +321,7 @@ public class LeitorNfe {
 	// ====================
 	// PRODUTOS
 	// ====================
-	public static ArrayList<Produto> getItens() {
+	private static ArrayList<Produto> getItens() {
 
 		ArrayList<Produto> lista = new ArrayList<>();
 
@@ -488,7 +490,7 @@ public class LeitorNfe {
 
 	}
 
-	public static Ipi getIpi(NodeList nodeListIpi) {
+	private static Ipi getIpi(NodeList nodeListIpi) {
 
 		Ipi ipi = new Ipi();
 
@@ -526,7 +528,7 @@ public class LeitorNfe {
 		return ipi;
 	}
 
-	public static IpiTrib getIpiTrib(NodeList nodeList) {
+	private static IpiTrib getIpiTrib(NodeList nodeList) {
 
 		IpiTrib ipiTrib = new IpiTrib();
 
@@ -557,7 +559,7 @@ public class LeitorNfe {
 
 	}
 
-	public static Pis getPis(NodeList nodeList) {
+	private static Pis getPis(NodeList nodeList) {
 
 		Pis pis = new Pis();
 		PisAliq pisAliq = new PisAliq();
@@ -595,7 +597,7 @@ public class LeitorNfe {
 		return pis;
 	}
 
-	public static Cofins getCofins(NodeList nodeList) {
+	private static Cofins getCofins(NodeList nodeList) {
 
 		Cofins cofins = new Cofins();
 		CofinsAliq cofinsAliq = new CofinsAliq();
@@ -633,7 +635,7 @@ public class LeitorNfe {
 		return cofins;
 	}
 
-	public static EnderEmit getEnderEmit(NodeList nodeList) {
+	private static EnderEmit getEnderEmit(NodeList nodeList) {
 
 		EnderEmit enderEmit = new EnderEmit();
 
@@ -685,7 +687,7 @@ public class LeitorNfe {
 
 	}
 
-	public static EnderDest getEnderDest(NodeList nodeList) {
+	private static EnderDest getEnderDest(NodeList nodeList) {
 
 		EnderDest enderDest = new EnderDest();
 
@@ -734,6 +736,114 @@ public class LeitorNfe {
 		}
 
 		return enderDest;
+
+	}
+
+	private static Totais getTotais() {
+
+		Totais totais = new Totais();
+
+		try {
+
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+
+			Document doc = builder.parse(caminho);
+
+			NodeList lista = doc.getElementsByTagName("ICMSTot");
+
+			Node node = lista.item(0);
+
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+				NodeList filhos = node.getChildNodes();
+
+				for (int i = 0; i < filhos.getLength(); i++) {
+
+					Node filho = filhos.item(i);
+
+					Element el = (Element) filho;
+
+					switch (el.getTagName()) {
+					case "vBC":
+						totais.setvBC(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vICMS":
+						totais.setvICMS(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vICMSDeson":
+						totais.setvICMSDeson(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vFCP":
+						totais.setvFCP(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vBCST":
+						totais.setvBCST(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vST":
+						totais.setvST(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vFCPST":
+						totais.setvFCPST(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vFCPSTRet":
+						totais.setvFCPSTRet(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vProd":
+						totais.setvProd(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vFrete":
+						totais.setvFrete(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vSeg":
+						totais.setvSeg(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vDesc":
+						totais.setvDesc(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vII":
+						totais.setvII(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vIPI":
+						totais.setvIPI(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vIPIDevol":
+						totais.setvIPIDevol(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vPIS":
+						totais.setvPIS(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vCOFINS":
+						totais.setvCOFINS(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vOutro":
+						totais.setvOutro(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vNF":
+						totais.setvNF(Double.parseDouble(el.getTextContent()));
+						break;
+					case "vTotTrib":
+						totais.setvTotTrib(Double.parseDouble(el.getTextContent()));
+						break;
+					}
+
+				}
+
+			}
+
+			return totais;
+
+		} catch (
+
+		ParserConfigurationException ex) {
+			ex.printStackTrace();
+		} catch (SAXException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
 
 	}
 
