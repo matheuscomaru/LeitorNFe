@@ -1,8 +1,27 @@
-package com.comaru.leitornfe;
+package com.comaru.leitornfe.model;
 
 public class EmitModel {
 
 	private String CNPJ, xNome, xFant, IE, CRT;
+	private String CNAE;
+	private String IM;
+	private EnderEmit enderEmit = new EnderEmit();
+
+	public String getCNAE() {
+		return CNAE;
+	}
+
+	public void setCNAE(String cNAE) {
+		CNAE = cNAE;
+	}
+
+	public String getIM() {
+		return IM;
+	}
+
+	public void setIM(String iM) {
+		IM = iM;
+	}
 
 	public String getCNPJ() {
 		return CNPJ;
@@ -42,6 +61,14 @@ public class EmitModel {
 
 	public void setCRT(String cRT) {
 		CRT = cRT;
+	}
+
+	public EnderEmit getEnderEmit() {
+		return enderEmit;
+	}
+
+	public void setEnderEmit(EnderEmit enderEmit) {
+		this.enderEmit = enderEmit;
 	}
 
 }

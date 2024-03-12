@@ -1,6 +1,4 @@
-package com.comaru.leitornfe;
-
-import com.comaru.leitornfe.model.ImpostoProduto;
+package com.comaru.leitornfe.model;
 
 public class Produto {
 

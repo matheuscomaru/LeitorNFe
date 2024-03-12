@@ -9,18 +9,25 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import com.comaru.leitornfe.model.Cofins;
 import com.comaru.leitornfe.model.CofinsAliq;
+import com.comaru.leitornfe.model.Destinatario;
+import com.comaru.leitornfe.model.EmitModel;
+import com.comaru.leitornfe.model.EnderDest;
+import com.comaru.leitornfe.model.EnderEmit;
 import com.comaru.leitornfe.model.Icms;
 import com.comaru.leitornfe.model.ImpostoProduto;
 import com.comaru.leitornfe.model.Ipi;
 import com.comaru.leitornfe.model.IpiTrib;
+import com.comaru.leitornfe.model.NFeModel;
 import com.comaru.leitornfe.model.Pis;
 import com.comaru.leitornfe.model.PisAliq;
+import com.comaru.leitornfe.model.Produto;
 
 /**
  * LeitorNfe
@@ -45,8 +52,117 @@ public class LeitorNfe {
 	public static NFeModel getNfeModel(String caminhoArquivo) {
 		caminho = caminhoArquivo;
 		NFeModel nfeModel = new NFeModel();
+		nfeModel = getIde(nfeModel);
 		nfeModel.setEmitNfe(getEmitNfe());
+		nfeModel.setDestNfe(getDestNfe());
 		nfeModel.setProdutos(getItens());
+		return nfeModel;
+
+	}
+
+	public static NFeModel getIde(NFeModel nfeModel) {
+
+		try {
+
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(caminho);
+
+			NodeList lista = doc.getElementsByTagName("infNFe");
+			Node node = lista.item(0);
+			NamedNodeMap map = node.getAttributes();
+
+			nfeModel.setInfNFe(map.getNamedItem("Id").getNodeValue());
+			nfeModel.setVersao(map.getNamedItem("versao").getNodeValue());
+
+			NodeList listaIde = doc.getElementsByTagName("ide");
+			Node nodeIde = listaIde.item(0);
+
+			NodeList filhos = nodeIde.getChildNodes();
+
+			for (int i = 0; i < filhos.getLength(); i++) {
+
+				Node filho = filhos.item(i);
+
+				Element el = (Element) filho;
+
+				switch (el.getTagName()) {
+				case "cUF":
+					nfeModel.setcUF(Integer.parseInt(el.getTextContent()));
+					break;
+				case "cNF":
+					nfeModel.setcNF(el.getTextContent());
+					break;
+				case "natOp":
+					nfeModel.setNatOp(el.getTextContent());
+					break;
+				case "mod":
+					nfeModel.setMod(el.getTextContent());
+					break;
+				case "serie":
+					nfeModel.setSerie(el.getTextContent());
+					break;
+				case "nNF":
+					nfeModel.setnNF(el.getTextContent());
+					break;
+				case "dhEmi":
+					nfeModel.setDhEmi(el.getTextContent());
+					break;
+				case "dhSaiEnt":
+					nfeModel.setDhSaiEnt(el.getTextContent());
+					break;
+				case "tpNF":
+					nfeModel.setTpNF(el.getTextContent());
+					break;
+				case "idDest":
+					nfeModel.setIdDest(Integer.parseInt(el.getTextContent()));
+					break;
+				case "cMunFG":
+					nfeModel.setcMunFG(Integer.parseInt(el.getTextContent()));
+					break;
+				case "tpImp":
+					nfeModel.setTpImp(Integer.parseInt(el.getTextContent()));
+					break;
+				case "tpEmis":
+					nfeModel.setTpEmis(Integer.parseInt(el.getTextContent()));
+					break;
+				case "cDV":
+					nfeModel.setcDV(Integer.parseInt(el.getTextContent()));
+					break;
+				case "tpAmb":
+					nfeModel.setTpAmb(Integer.parseInt(el.getTextContent()));
+					break;
+				case "finNFe":
+					nfeModel.setFinNFe(Integer.parseInt(el.getTextContent()));
+					break;
+				case "indFinal":
+					nfeModel.setIndFinal(Integer.parseInt(el.getTextContent()));
+					break;
+				case "indPres":
+					nfeModel.setIndPres(Integer.parseInt(el.getTextContent()));
+					break;
+				case "indIntermed":
+					nfeModel.setIndIntermed(Integer.parseInt(el.getTextContent()));
+					break;
+				case "verProc":
+					nfeModel.setVerProc(el.getTextContent());
+					break;
+				}
+
+			}
+
+			return nfeModel;
+
+		} catch (
+
+		ParserConfigurationException ex) {
+			ex.printStackTrace();
+		} catch (SAXException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
 		return nfeModel;
 
 	}
@@ -77,24 +193,36 @@ public class LeitorNfe {
 
 					Node filho = filhos.item(i);
 
-					Element elementoFilho = (Element) filho;
+					Element el = (Element) filho;
 
-					switch (elementoFilho.getTagName()) {
+					switch (el.getTagName()) {
 					case "CNPJ":
-						emit.setCNPJ(elementoFilho.getTextContent());
+						emit.setCNPJ(el.getTextContent());
 						break;
 					case "xNome":
-						emit.setxNome("xNome:" + elementoFilho.getTextContent());
+						emit.setxNome(el.getTextContent());
 						break;
 					case "xFant":
-						emit.setxFant("xFant:" + elementoFilho.getTextContent());
+						emit.setxFant(el.getTextContent());
 						break;
 					case "IE":
-						emit.setIE("IE:" + elementoFilho.getTextContent());
+						emit.setIE(el.getTextContent());
 						break;
 					case "CRT":
-
+						emit.setIE(el.getTextContent());
 						break;
+					case "CNAE":
+						emit.setCNAE(el.getTextContent());
+						break;
+					case "IM":
+						emit.setIM(el.getTextContent());
+						break;
+					case "enderEmit":
+						Node nodeEnderEmit = el;
+						NodeList nodeListNodeEnderEmit = nodeEnderEmit.getChildNodes();
+						emit.setEnderEmit(getEnderEmit(nodeListNodeEnderEmit));
+						break;
+
 					}
 
 				}
@@ -102,6 +230,77 @@ public class LeitorNfe {
 			}
 
 			return emit;
+
+		} catch (
+
+		ParserConfigurationException ex) {
+			ex.printStackTrace();
+		} catch (SAXException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		return null;
+
+	}
+
+	// ====================
+	// DEST
+	// ====================
+	public static Destinatario getDestNfe() {
+
+		Destinatario dest = new Destinatario();
+
+		try {
+
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+
+			Document doc = builder.parse(caminho);
+
+			NodeList lista = doc.getElementsByTagName("dest");
+
+			Node node = lista.item(0);
+
+			if (node.getNodeType() == Node.ELEMENT_NODE) {
+
+				NodeList filhos = node.getChildNodes();
+
+				for (int i = 0; i < filhos.getLength(); i++) {
+
+					Node filho = filhos.item(i);
+
+					Element el = (Element) filho;
+
+					switch (el.getTagName()) {
+					case "CNPJ":
+						dest.setCNPJ(el.getTextContent());
+						break;
+					case "xNome":
+						dest.setxNome(el.getTextContent());
+						break;
+					case "indIEDest":
+						dest.setIndIEDest(Integer.parseInt(el.getTextContent()));
+						break;
+					case "IE":
+						dest.setIE(el.getTextContent());
+						break;
+					case "email":
+						dest.setEmail(el.getTextContent());
+						break;
+					case "enderDest":
+						Node nodeEnderDest = el;
+						NodeList nodeListNodeEnderDest = nodeEnderDest.getChildNodes();
+						dest.setEnderDest(getEnderDest(nodeListNodeEnderDest));
+						break;
+					}
+
+				}
+
+			}
+
+			return dest;
 
 		} catch (
 
@@ -432,6 +631,110 @@ public class LeitorNfe {
 
 		cofins.setCofinsAliq(cofinsAliq);
 		return cofins;
+	}
+
+	public static EnderEmit getEnderEmit(NodeList nodeList) {
+
+		EnderEmit enderEmit = new EnderEmit();
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+
+			Node node = nodeList.item(i);
+			Element el = (Element) node;
+
+			switch (el.getTagName()) {
+			case "xLgr":
+				enderEmit.setxLgr(el.getTextContent());
+				break;
+			case "nro":
+				enderEmit.setnro(el.getTextContent());
+				break;
+			case "xCpl":
+				enderEmit.setxCpl(el.getTextContent());
+				break;
+			case "xBairro":
+				enderEmit.setxBairro(el.getTextContent());
+				break;
+			case "cMun":
+				enderEmit.setcMun(Integer.parseInt(el.getTextContent()));
+				break;
+			case "xMun":
+				enderEmit.setxMun(el.getTextContent());
+				break;
+			case "UF":
+				enderEmit.setUF(el.getTextContent());
+				break;
+			case "CEP":
+				enderEmit.setCEP(el.getTextContent());
+				break;
+			case "cPais":
+				enderEmit.setcPais(Integer.parseInt(el.getTextContent()));
+				break;
+			case "xPais":
+				enderEmit.setxPais(el.getTextContent());
+				break;
+			case "fone":
+				enderEmit.setFone(el.getTextContent());
+				break;
+
+			}
+
+		}
+
+		return enderEmit;
+
+	}
+
+	public static EnderDest getEnderDest(NodeList nodeList) {
+
+		EnderDest enderDest = new EnderDest();
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+
+			Node node = nodeList.item(i);
+			Element el = (Element) node;
+
+			switch (el.getTagName()) {
+			case "xLgr":
+				enderDest.setxLgr(el.getTextContent());
+				break;
+			case "nro":
+				enderDest.setnro(el.getTextContent());
+				break;
+			case "xCpl":
+				enderDest.setxCpl(el.getTextContent());
+				break;
+			case "xBairro":
+				enderDest.setxBairro(el.getTextContent());
+				break;
+			case "cMun":
+				enderDest.setcMun(Integer.parseInt(el.getTextContent()));
+				break;
+			case "xMun":
+				enderDest.setxMun(el.getTextContent());
+				break;
+			case "UF":
+				enderDest.setUF(el.getTextContent());
+				break;
+			case "CEP":
+				enderDest.setCEP(el.getTextContent());
+				break;
+			case "cPais":
+				enderDest.setcPais(Integer.parseInt(el.getTextContent()));
+				break;
+			case "xPais":
+				enderDest.setxPais(el.getTextContent());
+				break;
+			case "fone":
+				enderDest.setFone(el.getTextContent());
+				break;
+
+			}
+
+		}
+
+		return enderDest;
+
 	}
 
 }

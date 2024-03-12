@@ -1,5 +1,8 @@
 package com.comaru.leitornfe;
 
+import com.comaru.leitornfe.model.NFeModel;
+import com.comaru.leitornfe.model.Produto;
+
 public class teste {
 
 	public static void main(String[] args) {
@@ -15,9 +18,12 @@ public class teste {
 
 		// LeitorNfe.getItens("C:\\teste.xml");
 
+		System.out.println(nfeModel.getEmitNfe().getEnderEmit().getnro());
+		System.out.println(nfeModel.getEmitNfe().getEnderEmit().getxCpl());
+
 		for (Produto p : nfeModel.getProdutos()) {
 
-			System.out.println(p.getImposto().getCofins().getCofinsAliq().getvCOFINS());
+			// System.out.println(p.getImposto().getCofins().getCofinsAliq().getvCOFINS());
 		}
 	}
 
