@@ -8,22 +8,22 @@ public class teste {
 	public static void main(String[] args) {
 
 		NFeModel nfeModel = new NFeModel();
+		nfeModel = LeitorNfe.getNfeModel(
+				"file:\\C:\\Users\\mathe\\OneDrive\\Área de Trabalho\\teste\\51230131178921000172550010000118171780670669.xml");
 
-		nfeModel = LeitorNfe.getNfeModel("C:\\teste.xml");
+		// Dados NFe
+		// System.out.println(nfeModel.getnNF());
+		// System.out.println(nfeModel.getInfNFe());
 
-		// System.out.println("CNPJ:" + nfeModel.getEmitNfe().getCNPJ());
-		// System.out.println("RazaoSocial:" + nfeModel.getEmitNfe().getxNome());
-		// System.out.println("Fantasia:" + nfeModel.getEmitNfe().getxFant());
-		// System.out.println("IE:" + nfeModel.getEmitNfe().getIE());
+		// Dados Emitente
+		// System.out.println(nfeModel.getEmitNfe().getEnderEmit().getCEP());
 
-		// LeitorNfe.getItens("C:\\teste.xml");
+		// Dados Destinatário
+		// System.out.println(nfeModel.getDestNfe().getEmail());
 
-		System.out.println(nfeModel.getEmitNfe().getEnderEmit().getnro());
-		System.out.println(nfeModel.getTotais().getvICMS());
-
+		// Produtos
 		for (Produto p : nfeModel.getProdutos()) {
-
-			// System.out.println(p.getImposto().getCofins().getCofinsAliq().getvCOFINS());
+			System.out.println(p.getImposto().getIcms().getCst());
 		}
 	}
 

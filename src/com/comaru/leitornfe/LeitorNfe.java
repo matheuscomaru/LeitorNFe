@@ -396,6 +396,7 @@ public class LeitorNfe {
 						case "indTot":
 							produto.setIndTot(Integer.parseInt(el.getTextContent()));
 							break;
+
 						}
 
 					}
@@ -409,53 +410,9 @@ public class LeitorNfe {
 				NodeList nodeListImposto = nodeImposto.getChildNodes();
 				Element elementListImposto = (Element) nodeListImposto;
 
-				// ====================
-				// --> ICMS
-				// ====================
-
-				Node nodeIcms00 = nodeListImposto.item(1);
-				NodeList nodeListIcms = nodeIcms00.getChildNodes();
-
-				for (int j = 0; j < nodeListIcms.getLength(); j++) {
-
-					Node nodeIcms = nodeListIcms.item(0);
-
-					if (nodeIcms.getNodeType() == Node.ELEMENT_NODE) {
-
-						NodeList filhos = nodeIcms.getChildNodes();
-
-						for (int contIcms = 0; contIcms < filhos.getLength(); contIcms++) {
-
-							Node filho = filhos.item(contIcms);
-							Element el = (Element) filho;
-
-							switch (el.getTagName()) {
-							case "orig":
-								icms.setOrig(el.getTextContent());
-								break;
-							case "CST":
-								icms.setCst(el.getTextContent());
-								break;
-							case "modBC":
-								icms.setModBC(el.getTextContent());
-								break;
-							case "vBC":
-								icms.setvBC(Double.parseDouble(el.getTextContent()));
-								break;
-							case "pICMS":
-								icms.setpICMS(Double.parseDouble(el.getTextContent()));
-								break;
-							case "vICMS":
-								icms.setvICMS(Double.parseDouble(el.getTextContent()));
-								break;
-
-							}
-
-						}
-
-					}
-
-				}
+				// ICMS
+				NodeList nodeListIcms = elementListImposto.getElementsByTagName("ICMS");
+				imposto.setIcms(getIcms(nodeListIcms));
 
 				// IPI
 				NodeList nodeListIpi = elementListImposto.getElementsByTagName("IPI");
@@ -469,7 +426,6 @@ public class LeitorNfe {
 				NodeList nodeListCofins = elementListImposto.getElementsByTagName("COFINS");
 				imposto.setCofins(getCofins(nodeListCofins));
 
-				imposto.setIcms(icms);
 				produto.setImposto(imposto);
 				lista.add(produto);
 			}
@@ -845,6 +801,62 @@ public class LeitorNfe {
 
 		return null;
 
+	}
+
+	private static Icms getIcms(NodeList nodeList) {
+
+		Icms icms = new Icms();
+
+		for (int i = 0; i < nodeList.getLength(); i++) {
+
+			Node node = nodeList.item(i).getFirstChild();
+			NodeList n2 = node.getChildNodes();
+
+			for (int j = 0; j < n2.getLength(); j++) {
+
+				Element el = (Element) n2.item(j);
+
+				switch (el.getTagName()) {
+				case "orig":
+					icms.setOrig(el.getTextContent());
+					break;
+				case "CST":
+					icms.setCst(el.getTextContent());
+					break;
+				case "modBC":
+					icms.setModBC(el.getTextContent());
+					break;
+				case "vBC":
+					icms.setvBC(Double.parseDouble(el.getTextContent()));
+					break;
+				case "pICMS":
+					icms.setpICMS(Double.parseDouble(el.getTextContent()));
+					break;
+				case "vICMS":
+					icms.setvICMS(Double.parseDouble(el.getTextContent()));
+					break;
+				case "modBCST":
+					icms.setModBCST(el.getTextContent());
+					break;
+				case "pMVAST":
+					icms.setpMVAST(Double.parseDouble(el.getTextContent()));
+					break;
+				case "vBCST":
+					icms.setvBCST(Double.parseDouble(el.getTextContent()));
+					break;
+				case "pICMSST":
+					icms.setpICMSST(Double.parseDouble(el.getTextContent()));
+					break;
+				case "vICMSST":
+					icms.setvICMSST(Double.parseDouble(el.getTextContent()));
+					break;
+
+				}
+			}
+
+		}
+
+		return icms;
 	}
 
 }

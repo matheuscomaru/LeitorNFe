@@ -8,6 +8,11 @@ public class Icms {
 	private double vBC;
 	private double pICMS;
 	private double vICMS;
+	private String modBCST;
+	private double pMVAST;
+	private double vBCST;
+	private double pICMSST;
+	private double vICMSST;
 
 	public String getOrig() {
 		return orig;
@@ -55,6 +60,46 @@ public class Icms {
 
 	public void setvICMS(double vICMS) {
 		this.vICMS = vICMS;
+	}
+
+	public String getModBCST() {
+		return modBCST;
+	}
+
+	public void setModBCST(String modBCST) {
+		this.modBCST = modBCST;
+	}
+
+	public double getpMVAST() {
+		return pMVAST;
+	}
+
+	public void setpMVAST(double pMVAST) {
+		this.pMVAST = pMVAST;
+	}
+
+	public double getvBCST() {
+		return vBCST;
+	}
+
+	public void setvBCST(double vBCST) {
+		this.vBCST = vBCST;
+	}
+
+	public double getpICMSST() {
+		return pICMSST;
+	}
+
+	public void setpICMSST(double pICMSST) {
+		this.pICMSST = pICMSST;
+	}
+
+	public double getvICMSST() {
+		return vICMSST;
+	}
+
+	public void setvICMSST(double vICMSST) {
+		this.vICMSST = vICMSST;
 	}
 
 }
