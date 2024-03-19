@@ -38,7 +38,7 @@ import com.comaru.leitornfe.model.Totais;
  * fácilitar a manipulação.
  *
  * @author Matheus Comaru
- * @version 1.0
+ * @version 1.1
  */
 public class LeitorNfe {
 
@@ -278,6 +278,9 @@ public class LeitorNfe {
 					switch (el.getTagName()) {
 					case "CNPJ":
 						dest.setCNPJ(el.getTextContent());
+						break;
+					case "CPF":
+						dest.setCPF(el.getTextContent());
 						break;
 					case "xNome":
 						dest.setxNome(el.getTextContent());

@@ -3,11 +3,20 @@ package com.comaru.leitornfe.model;
 public class Destinatario {
 
 	private String CNPJ;
+	private String CPF;
 	private String xNome;
 	private int indIEDest;
 	private String IE;
 	private String email;
 	EnderDest enderDest = new EnderDest();
+
+	public String getCPF() {
+		return CPF;
+	}
+
+	public void setCPF(String cPF) {
+		CPF = cPF;
+	}
 
 	public String getCNPJ() {
 		return CNPJ;
