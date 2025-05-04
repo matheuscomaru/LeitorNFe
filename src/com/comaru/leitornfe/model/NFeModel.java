@@ -27,11 +27,20 @@ public class NFeModel {
 	private int indIntermed;
 	private int procEmi;
 	private String verProc;
-
+	private String infCpl;
+	
 	EmitModel emitNfe = new EmitModel();
 	Destinatario destNfe = new Destinatario();
 	ArrayList<Produto> produtos = new ArrayList<>();
 	Totais totais = new Totais();
+	
+	public String getInfCpl() {
+		return infCpl;
+	}
+
+	public void setInfCpl(String infCpl) {
+		this.infCpl = infCpl;
+	}
 
 	public EmitModel getEmitNfe() {
 		return emitNfe;

@@ -34,8 +34,8 @@ import com.comaru.leitornfe.model.Totais;
  * LeitorNfe
  *
  * <p>
- * Possui métodos para ler o arquivo XML de NFe e converter em modelos para
- * fácilitar a manipulação.
+ * Possui mï¿½todos para ler o arquivo XML de NFe e converter em modelos para
+ * fï¿½cilitar a manipulaï¿½ï¿½o.
  *
  * @author Matheus Comaru
  * @version 1.1
@@ -45,7 +45,7 @@ public class LeitorNfe {
 	static String caminho = "";
 
 	/**
-	 * Converte o XML da NF-e em um Objeto já manipulável.
+	 * Converte o XML da NF-e em um Objeto jï¿½ manipulï¿½vel.
 	 *
 	 * @param caminhoArquivo Caminho completo do XML exemplo C://arquivo.xml.
 	 * @return NFeModel.
@@ -152,6 +152,17 @@ public class LeitorNfe {
 				}
 
 			}
+			
+			
+			
+			//informaÃ§Ãµes complementares
+			NodeList nodeListInfCpl = doc.getElementsByTagName("infCpl");
+
+			if (nodeListInfCpl != null && nodeListInfCpl.getLength() > 0) {
+			    String conteudo = nodeListInfCpl.item(0).getTextContent().trim();
+			    nfeModel.setInfCpl(conteudo);
+			}
+
 
 			return nfeModel;
 
