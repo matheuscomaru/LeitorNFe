@@ -8,7 +8,7 @@ public class teste {
 	public static void main(String[] args) {
 
 		NFeModel nfeModel = new NFeModel();
-		nfeModel = LeitorNfe.getNfeModel("file:\\C:\\teste3.xml");
+		nfeModel = LeitorNfe.getNfeModel("file:\\C:\\teste.xml");
 
 		// Dados NFe
 		// System.out.println(nfeModel.getnNF());
@@ -17,13 +17,13 @@ public class teste {
 		// Dados Emitente
 		// System.out.println(nfeModel.getEmitNfe().getEnderEmit().getCEP());
 
-		// Dados Destinatário
-		System.out.println(nfeModel.getDestNfe().getCPF());
+		// Dados Destinatï¿½rio
+		System.out.println(nfeModel.getnNF());
 
 		// Produtos
-		// for (Produto p : nfeModel.getProdutos()) {
-		// System.out.println(p.getImposto().getIcms().getCst());
-		// }
+		 for (Produto p : nfeModel.getProdutos()) {
+			 System.out.println(p.getImposto().getIcms().getCsosn());
+		 }
 	}
 
 }

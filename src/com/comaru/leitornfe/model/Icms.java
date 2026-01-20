@@ -13,6 +13,15 @@ public class Icms {
 	private double vBCST;
 	private double pICMSST;
 	private double vICMSST;
+	private String csosn;
+
+	public String getCsosn() {
+		return csosn;
+	}
+
+	public void setCsosn(String csosn) {
+		this.csosn = csosn;
+	}
 
 	public String getOrig() {
 		return orig;

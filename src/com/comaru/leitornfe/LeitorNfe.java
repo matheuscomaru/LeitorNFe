@@ -38,7 +38,7 @@ import com.comaru.leitornfe.model.Totais;
  * f�cilitar a manipula��o.
  *
  * @author Matheus Comaru
- * @version 1.1
+ * @version 1.2
  */
 public class LeitorNfe {
 
@@ -352,8 +352,7 @@ public class LeitorNfe {
 
 				Produto produto = new Produto();
 				ImpostoProduto imposto = new ImpostoProduto();
-				Icms icms = new Icms();
-
+				
 				Node itemDet = listaDet.item(i);
 
 				NodeList listaProd = itemDet.getChildNodes();
@@ -836,6 +835,9 @@ public class LeitorNfe {
 					break;
 				case "CST":
 					icms.setCst(el.getTextContent());
+					break;
+				case "CSOSN":
+					icms.setCsosn(el.getTextContent());
 					break;
 				case "modBC":
 					icms.setModBC(el.getTextContent());
